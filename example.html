@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ExtendHTML test</title>
+  <script src="extendHTML.min.js"></script>
+</head>
+
+<body>
+  <script>
+    var propertys = ['name', 'description', 'author', 'date', 'tags', 'content']
+    var topicElement = html`
+    <div>
+      <h3>Topics</h3>
+      <div>
+      ${propertys.map(prop=>`<fieldset>
+              <label>${prop}</label>
+              <input data="${prop}"/>
+          </fieldset>`).join('')}
+
+          <button method="addTopic">Add Topic</button>
+      </div>
+    </div>`.extend({
+      addTopic: ({data}) => {
+        console.log(data)
+      }
+    })
+    document.body.append(topicElement)
+  </script>
+</body>
+
+</html>
