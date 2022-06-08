@@ -26,7 +26,7 @@ function html (str, ...args){
     var el = _html(taggedString(str, ...args));
     el.attach = function(host){ requestAnimationFrame(()=>host.append(el));return el; }
     el.attachOnly = function(host){ requestAnimationFrame(()=>appendOnly(host,el)); return el; }
-    el.extend = function(... args){
+    el.extend = function(... callback){
         el.child = getAttribute(el, 'child', (obj,child,name)=>{
             obj[name] = child;
         });
@@ -36,13 +36,13 @@ function html (str, ...args){
         el.methods = getAttribute(el,'method',(obj,child,name)=>{
             child.addEventListener('click',()=>obj[name](this))
         });
-        args.forEach(arg=>{
+        callback.forEach(arg=>{
             if(typeof arg === 'function'){
                 var methods = arg(el);
-                for (method in methods) el.methods[method] = methods[method];
+                for (var method in methods) el.methods[method] = methods[method];
             }
             else if (typeof arg === 'object'){
-                for (method in arg) el.methods[method] = arg[method];
+                for (var method in arg) el.methods[method] = arg[method];
             }
         })
         return el
