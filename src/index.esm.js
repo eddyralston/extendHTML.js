@@ -18,9 +18,14 @@ function _html(str){
     el.innerHTML = str
     return el.firstElementChild;
 }
-
+const appendOnly = (parent, child) => {
+    parent.innerHTML = '';
+    parent.appendChild(child);
+}
 function html (str, ...args){
     var el = _html(taggedString(str, ...args));
+    el.attach = function(host){ requestAnimationFrame(()=>host.append(el));return el; }
+    el.attachOnly = function(host){ requestAnimationFrame(()=>appendOnly(host,el)); return el; }
     el.extend = function(... args){
         el.child = getAttribute(el, 'child', (obj,child,name)=>{
             obj[name] = child;
@@ -44,4 +49,7 @@ function html (str, ...args){
     }
     return el
 }
-export {html}
+
+const id = id => document.getElementById(id);
+
+export {html,id}
